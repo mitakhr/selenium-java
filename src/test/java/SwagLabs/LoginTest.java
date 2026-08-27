@@ -43,6 +43,26 @@ public class LoginTest {
         Assert.assertTrue(actualError.contains("Username and password do not match"));
     }
 
+    @Test
+    public void invalidPassword() {
+        loginPage.login("standard_user", "wrong");
+        String actualError = loginPage.getErrrorMessage();
+        Assert.assertTrue(actualError.contains("Username and password do not match"));
+    }
+
+    @Test
+    public void emptyUsername() {
+        loginPage.login("", "secret_sauce");
+        String actualError = loginPage.getErrrorMessage();
+        Assert.assertEquals(actualError, "Epic sadface: Username is required");
+    }
+    @Test
+    public void emptyPassword() {
+        loginPage.login("standard_user", "");
+        String actualError = loginPage.getErrrorMessage();
+        Assert.assertEquals(actualError, "Epic sadface: Password is required");
+    }
+
 
 
 }
