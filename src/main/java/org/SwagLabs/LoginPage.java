@@ -39,4 +39,8 @@ public class LoginPage {
         return driver.findElement(By.className("error-message-container")).getText();
     }
 
+    public boolean isHompageDisplayed() {
+        return driver.findElement(By.xpath("//*[@id='inventory_container']")).isDisplayed();
+    }
+
 }

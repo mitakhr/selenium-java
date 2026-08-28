@@ -33,6 +33,10 @@ public class LoginTest {
         //validate if success login direct to inventory.html
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(currentUrl, "https://www.saucedemo.com/inventory.html");
+        //validate show page after login is list products
+        boolean homepageDisplay = loginPage.isHompageDisplayed();
+        Assert.assertTrue(homepageDisplay);
+
     }
 
     @Test
@@ -47,20 +51,39 @@ public class LoginTest {
     public void invalidPassword() {
         loginPage.login("standard_user", "wrong");
         String actualError = loginPage.getErrrorMessage();
-        Assert.assertTrue(actualError.contains("Username and password do not match"));
+        Assert.assertTrue(actualError.contains("Username and password do not match")); //expected resul = true if actual error contains the message
     }
 
     @Test
     public void emptyUsername() {
         loginPage.login("", "secret_sauce");
         String actualError = loginPage.getErrrorMessage();
-        Assert.assertEquals(actualError, "Epic sadface: Username is required");
+        Assert.assertEquals(actualError, "Epic sadface: Username is required"); //expected result = actual erro == the string, note: case sensitive
     }
     @Test
     public void emptyPassword() {
         loginPage.login("standard_user", "");
         String actualError = loginPage.getErrrorMessage();
         Assert.assertEquals(actualError, "Epic sadface: Password is required");
+    }
+
+    //more simple, choose seperate test or one single test invalidLoginData
+    //using data provider to test invalid logi with some conditions
+    @DataProvider(name = "invalidLoginData")
+    public Object[][] invalidLoginData() {
+        return new Object[][]{
+                {"invalid", "secret_sauce", "Username and password do not match"},
+                {"standard_user", "invalid", "Username and password do not match"},
+                {"", "secret_sauce", "Username is required"},
+                {"standard_user", "", "Password is required"},
+                {"", "", "Username is required"},
+        };
+    }
+    @Test(dataProvider = "invalidLoginData")
+    public void invalidLoginData(String username, String password, String error) {
+        loginPage.login(username, password);
+        String actualError = loginPage.getErrrorMessage();
+        Assert.assertTrue(actualError.contains(error));
     }
 
 
