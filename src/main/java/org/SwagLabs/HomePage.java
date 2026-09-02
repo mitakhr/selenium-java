@@ -85,6 +85,11 @@ public class HomePage {
         return sides;
     }
 
+    public void logout(){
+        openBurgerMenu();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link"))); //use clickable bcs it's wait and click
+        el.click();
+    }
 
 
 }
