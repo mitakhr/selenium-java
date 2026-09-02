@@ -3,6 +3,7 @@ package SwagLabs;
 import org.SwagLabs.HomePage;
 import org.SwagLabs.LoginPage;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -11,7 +12,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HomepageTest {
@@ -65,6 +68,7 @@ public class HomepageTest {
 
         List<String> actualValues = homePage.getFilterList();
         Assert.assertEquals(actualValues, expectedList);
+        Collections.sort(actualValues);
     }
 
     @Test
@@ -73,5 +77,35 @@ public class HomepageTest {
         Assert.assertTrue(cartButton);
     }
 
+    @Test
+    public void sortPriceWorks() {
+        homePage.selectSortOption("Price (high to low)");
+        List<Double> actualPrice = homePage.getDisplayedPrice();
 
-}
+        List<Double> expected = homePage.getDisplayedPrice();
+        Collections.sort(actualPrice, Collections.reverseOrder());
+
+        Assert.assertEquals(actualPrice, expected);
+    }
+
+    @Test
+    public void showBurgerMenus() {
+        homePage.openBurgerMenu();
+       boolean expected = homePage.isDisplayedBurgerMenu();
+       Assert.assertTrue(expected);
+    }
+
+    @Test
+    public void getSideBarMenu() {
+        homePage.openBurgerMenu();
+        List<String> expected = List.of(
+                "All Items",
+                "About",
+                "Logout",
+                "Reset App State");
+        List<String> actualValues = homePage.getSideBarMenu();
+        Assert.assertEquals(actualValues, expected);
+    }
+
+
+;}
