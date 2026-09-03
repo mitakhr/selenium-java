@@ -3,17 +3,12 @@ package SwagLabs;
 import org.SwagLabs.HomePage;
 import org.SwagLabs.LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,6 +70,7 @@ public class HomepageTest {
     public void haveCartButton() {
         boolean cartButton = homePage.getCartButton();
         Assert.assertTrue(cartButton);
+        //it can be Assert.assertTrue(homePage.getCartButton());
     }
 
     @Test
@@ -91,8 +87,8 @@ public class HomepageTest {
     @Test
     public void showBurgerMenus() {
         homePage.openBurgerMenu();
-       boolean expected = homePage.isDisplayedBurgerMenu();
-       Assert.assertTrue(expected);
+        boolean expected = homePage.isDisplayedBurgerMenu();
+        Assert.assertTrue(expected);
     }
 
     @Test
@@ -105,6 +101,19 @@ public class HomepageTest {
                 "Reset App State");
         List<String> actualValues = homePage.getSideBarMenu();
         Assert.assertEquals(actualValues, expected);
+    }
+
+    @Test
+    public void productCardHasComponents() { //to validate all product has all card component
+        Assert.assertTrue(homePage.showEachProudctCard());
+    }
+
+    @Test
+    public void productCardHasMissingInfo() { // sama kaya di atas, but + info where's the missing info in product
+        //Thread.sleep(100000); and put throws InterruptedException, only for testing missing product info, put
+        List<String> missing = homePage.getProductWithRequiredInfo();
+        Assert.assertTrue(missing.isEmpty(), "found issue in product : "+ missing);
+
     }
 
 
