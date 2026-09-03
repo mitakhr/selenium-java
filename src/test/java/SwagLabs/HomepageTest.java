@@ -73,8 +73,9 @@ public class HomepageTest {
         //it can be Assert.assertTrue(homePage.getCartButton());
     }
 
+    /// FILTER PRICE & Name
     @Test
-    public void sortPriceWorks() {
+    public void sortPriceWorksDesc() {
         homePage.selectSortOption("Price (high to low)");
         List<Double> actualPrice = homePage.getDisplayedPrice();
 
@@ -83,7 +84,37 @@ public class HomepageTest {
 
         Assert.assertEquals(actualPrice, expected);
     }
+    @Test
+    public void sortPriceWorksAsc() {
+        homePage.selectSortOption("Price (low to high)");
+        List<Double> actualPrice = homePage.getDisplayedPrice();
 
+        List<Double> expected = homePage.getDisplayedPrice();
+        Collections.sort(actualPrice);
+
+        Assert.assertEquals(actualPrice, expected);
+    }
+
+    @Test
+    public void sortNameWorksAsc() {
+        homePage.selectSortOption("Name (A to Z)");
+        List<String> actualName = homePage.getDisplayedName();
+        List<String> expected = homePage.getDisplayedName();
+        Collections.sort(actualName);
+        Assert.assertEquals(actualName, expected);
+    }
+
+    @Test
+    public void sortNameWorksDesc() {
+        homePage.selectSortOption("Name (Z to A)");
+        List<String> actualName = homePage.getDisplayedName();
+        List<String> expected = homePage.getDisplayedName();
+        Collections.sort(actualName, Collections.reverseOrder());
+        Assert.assertEquals(actualName, expected);
+    }
+
+
+    /// BURGER AND SIDEBAR
     @Test
     public void showBurgerMenus() {
         homePage.openBurgerMenu();
@@ -103,6 +134,7 @@ public class HomepageTest {
         Assert.assertEquals(actualValues, expected);
     }
 
+    /// PRODUCT CARD VALIDATION
     @Test
     public void productCardHasComponents() { //to validate all product has all card component
         Assert.assertTrue(homePage.showEachProudctCard());
@@ -113,8 +145,14 @@ public class HomepageTest {
         //Thread.sleep(100000); and put throws InterruptedException, only for testing missing product info, put
         List<String> missing = homePage.getProductWithRequiredInfo();
         Assert.assertTrue(missing.isEmpty(), "found issue in product : "+ missing);
+    }
 
+    @Test
+    public void productDetailPageExists() throws InterruptedException {
+        homePage.showProductDetailPage();
+        //Thread.sleep(50000); only for testing delete element
+        Assert.assertTrue(homePage.detailPageHasDetailProduct());
     }
 
 
-;}
+}
