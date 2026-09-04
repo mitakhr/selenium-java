@@ -147,11 +147,20 @@ public class HomepageTest {
         Assert.assertTrue(missing.isEmpty(), "found issue in product : "+ missing);
     }
 
+    /// product detail
+
     @Test
     public void productDetailPageExists() throws InterruptedException {
         homePage.showProductDetailPage();
         //Thread.sleep(50000); only for testing delete element
         Assert.assertTrue(homePage.detailPageHasDetailProduct());
+    }
+
+    @Test
+    public void productDetailPageMissingInfo()  {
+        homePage.showProductDetailPage();
+        List<String> missing = homePage.getProductDetailPage();
+        Assert.assertTrue(missing.isEmpty(), "found issue in product : "+ missing);
     }
 
 

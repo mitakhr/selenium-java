@@ -163,7 +163,10 @@ public class HomePage {
     }
 
     public List<String> getProductDetailPage(){
+        //get element
         WebElement name = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_details_container")));
+
+        //find the element, if empty add to array
         List<String> details = new ArrayList<>();
         if (driver.findElements(By.className("inventory_details_img")).isEmpty()){
             details.add("Product image is missing");
@@ -177,7 +180,7 @@ public class HomePage {
         if (driver.findElements(By.className("inventory_details_price")).isEmpty()){
             details.add("Product price is missing");
         }
-        if (driver.findElements(By.cssSelector("Button.btn-inventory")).isEmpty()){
+        if (driver.findElements(By.id("add-to-cart")).isEmpty()){
             details.add("Button Add to cart image is missing");
         }
         return details;
