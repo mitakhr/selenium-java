@@ -1,6 +1,7 @@
 package org.SwagLabs;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class HomePage {
     private WebDriver driver;
@@ -20,19 +22,19 @@ public class HomePage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void showHomePage() {
+    public void navigateToHomePage() {
         driver.get("https://www.saucedemo.com/inventory.html");
     }
 
-    public String  getHeaderPage(){
+    public String getHomePageHeaderText() {
         return driver.findElement(By.cssSelector("#header_container > div.header_secondary_container > span")).getText();
     }
 
-    public boolean getSortButton(){
+    public boolean isSortButtonDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("product_sort_container"))).isDisplayed();
     }
 
-    public List<String> getFilterList(){
+    public List<String> getSortOptionList(){
         //Locate the dropdown and initialize the Select class
         WebElement filterList = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("product_sort_container")));
         Select dropdownFilter = new Select(filterList);
@@ -45,7 +47,7 @@ public class HomePage {
         return optionValues;
     }
 
-    public boolean getCartButton(){
+    public boolean isCartButtonDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("shopping_cart_container"))).isDisplayed();
     }
 
@@ -55,7 +57,7 @@ public class HomePage {
         new Select(filterList).selectByVisibleText(option);
     }
 
-    public List<Double> getDisplayedPrice(){
+    public List<Double> getDisplayedPrices(){
         //get all the value after being selected
         List<WebElement> priceList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_price")));
         List<Double> prices = new ArrayList<>();
@@ -66,7 +68,7 @@ public class HomePage {
         return prices;
     }
 
-    public List<String> getDisplayedName(){
+    public List<String> getDisplayedNames(){
         List<WebElement> name = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item_name")));
 
         List<String> names = new ArrayList<>();
@@ -81,7 +83,7 @@ public class HomePage {
         WebElement bgrMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("react-burger-menu-btn")));
         bgrMenu.click();
     }
-    public boolean isDisplayedBurgerMenu(){
+    public boolean isBurgerMenuDisplayed(){
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("bm-menu-wrap"))).isDisplayed();
     }
 
@@ -95,7 +97,7 @@ public class HomePage {
         return sides;
     }
 
-    public boolean showEachProudctCard(){
+    public boolean isProductCardDisplayedRequiredInfo(){
         //get each product card
         List<WebElement> product = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item")));
 
@@ -105,7 +107,7 @@ public class HomePage {
             boolean hasName = !p.findElements(By.className("inventory_item_name")).isEmpty();
             boolean hasDesc = !p.findElements(By.className("inventory_item_desc")).isEmpty();
             boolean hasPrice = !p.findElements(By.className("inventory_item_price")).isEmpty();
-            boolean hasCartButton = !p.findElements(By.cssSelector("Button.btn_inventory")).isEmpty(); //Reads as: "a <button> element that ALSO has the class btn_inventory."
+            boolean hasCartButton = !p.findElements(By.cssSelector("button.btn_inventory")).isEmpty(); //Reads as: "a <button> element that ALSO has the class btn_inventory."
 
             if (!hasImage || !hasName || !hasDesc || !hasPrice || !hasCartButton){
                 return false;
@@ -114,7 +116,7 @@ public class HomePage {
         return true;
     }
 
-    public List<String> getProductWithRequiredInfo(){
+    public List<String> getMissingProductInfo(){
         //get each product card
         List<WebElement> product = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item")));
         //array to listing missing info
@@ -134,59 +136,103 @@ public class HomePage {
             if (p.findElements(By.className("inventory_item_price")).isEmpty()){
                 missingInfo.add("Product " + i + " is missing");
             }
-            if (p.findElements(By.className("inventory_item_price")).isEmpty()){
-                missingInfo.add("Product " + i + " is missing");
-            }
-            if (p.findElements(By.cssSelector("Button.btn-inventory")).isEmpty()){
+            if (p.findElements(By.cssSelector("button.btn_inventory")).isEmpty()){
                 missingInfo.add("Product " + i + " is missing");
             }
         }
         return missingInfo;
     }
 
-    public void showProductDetailPage(){
+    public void openProductDetailPage(){
         WebElement linkName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_item_name")));
         linkName.click();
     }
 
-    public boolean detailPageHasDetailProduct(){
+    public boolean isProductDetailPageDisplayed(){
         WebElement name = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_details_container")));
 
-        boolean hasImage = !driver.findElements(By.className("inventory_details_img")).isEmpty();
-        boolean hasName = !driver.findElements(By.className("inventory_details_name")).isEmpty();
-        boolean hasDesc = !driver.findElements(By.className("inventory_details_desc")).isEmpty();
-        boolean hasPrice = !driver.findElements(By.className("inventory_details_price")).isEmpty();
-        boolean hasCartButton = !driver.findElements(By.cssSelector("button.btn_inventory")).isEmpty();
+        boolean hasImage = !name.findElements(By.className("inventory_details_img")).isEmpty();
+        boolean hasName = !name.findElements(By.className("inventory_details_name")).isEmpty();
+        boolean hasDesc = !name.findElements(By.className("inventory_details_desc")).isEmpty();
+        boolean hasPrice = !name.findElements(By.className("inventory_details_price")).isEmpty();
+        boolean hasCartButton = !name.findElements(By.cssSelector("button.btn_inventory")).isEmpty();
 
         return hasImage && hasName && hasDesc && hasPrice && hasCartButton;
 
     }
 
-    public List<String> getProductDetailPage(){
+    public List<String> getMissingProductDetailInfo(){
         //get element
-        WebElement name = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_details_container")));
+        WebElement container = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_details_container")));
 
         //find the element, if empty add to array
         List<String> details = new ArrayList<>();
-        if (driver.findElements(By.className("inventory_details_img")).isEmpty()){
+        if (container.findElements(By.className("inventory_details_img")).isEmpty()){
             details.add("Product image is missing");
         }
-        if (driver.findElements(By.className("inventory_details_name")).isEmpty()){
+        if (container.findElements(By.className("inventory_details_name")).isEmpty()){
             details.add("Product name is missing");
         }
-        if (driver.findElements(By.className("inventory_details_desc")).isEmpty()){
+        if (container.findElements(By.className("inventory_details_desc")).isEmpty()){
             details.add("Product description is missing");
         }
-        if (driver.findElements(By.className("inventory_details_price")).isEmpty()){
+        if (container.findElements(By.className("inventory_details_price")).isEmpty()){
             details.add("Product price is missing");
         }
-        if (driver.findElements(By.id("add-to-cart")).isEmpty()){
+        if (container.findElements(By.id("add-to-cart")).isEmpty()){
             details.add("Button Add to cart image is missing");
         }
         return details;
     }
 
+    public void addProductToCart(String productName){
+        //get the container
+        List<WebElement> product = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item")));
+        //get all the product text name
+        for (WebElement p : product){
+            String name = p.findElement(By.className("inventory_item_name")).getText();
+            //find product equals productName, if found click add button
+            if (name.equalsIgnoreCase(productName)){
+                p.findElement(By.cssSelector("button.btn_inventory")).click();
+                return;
+            }
+        }
+        throw new NoSuchElementException("Product not found to click " + productName);
+    }
 
+    public String getTextButtonFromProductCard(String productName){
+        //get the container
+        List<WebElement> product = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("inventory_item")));
+        //get all the product text name
+        for (WebElement p : product){
+            String name = p.findElement(By.className("inventory_item_name")).getText();
+            //find product equals productName, if found click add button
+            if (name.equalsIgnoreCase(productName)){
+                String buttonText = p.findElement(By.cssSelector("button.btn_inventory")).getText();
+                return buttonText;
+            }
+        }
+        throw new NoSuchElementException("Product not found " + productName);
+    }
+    public int getBadgeCartCount(){
+        try {
+            WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("shopping_cart_badge")));
+            return Integer.parseInt(badge.getText());
+        }
+        catch (TimeoutException e){
+            return 0;
+        }
+    }
+
+
+    public void resetAppState(){
+        openBurgerMenu();
+        WebElement resetApp = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link"))); //use clickable bcs it's wait and click
+        resetApp.click();
+        WebElement close = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn"))); // nutup sidebar biar ga nutupin lainnya
+        close.click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("bm-menu-wrap"))); //cegah race cond,
+    }
 
     public void logout(){
         openBurgerMenu();

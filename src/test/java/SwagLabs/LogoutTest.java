@@ -9,7 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class Logout {
+public class LogoutTest {
     WebDriver driver;
     LoginPage loginPage;
     HomePage homePage;
@@ -41,9 +41,9 @@ public class Logout {
     @Test
     public void logoutClearSession() {
         homePage.logout();
-        homePage.showHomePage();
+        homePage.navigateToHomePage();
         String url = driver.getCurrentUrl();
-        Assert.assertNotEquals(url, "ttps://www.saucedemo.com/inventory.html");
+        Assert.assertNotEquals(url, "https://www.saucedemo.com/inventory.html");
     }
 
 }

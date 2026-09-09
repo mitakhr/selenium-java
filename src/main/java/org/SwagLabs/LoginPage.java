@@ -37,11 +37,11 @@ public class LoginPage {
         clickLoginButton();
     }
 
-    public String getErrrorMessage() {
+    public String getErrorMessage() {
         return driver.findElement(By.className("error-message-container")).getText();
     }
 
-    public boolean isHompageDisplayed() {
+    public boolean isHomepageDisplayed() {
         return driver.findElement(By.xpath("//*[@id='inventory_container']")).isDisplayed();
     }
 
