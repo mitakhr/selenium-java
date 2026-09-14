@@ -39,14 +39,19 @@ public class MultipleWIndows {
         Set<String> handles = getWindowHandles();
 
         for (String handle : handles) {
-            if (!handles.equals(parentHandle)) {
+            if (!handle.equals(parentHandle)) {
                 driver.switchTo().window(handle);
+                return;
             }
         }
 
     }
     public String getTextNewWindow(){
         return  driver.getTitle();
+    }
+    public int numberOfWindows(int expectedCount){
+        wait.until(ExpectedConditions.numberOfWindowsToBe(expectedCount));
+        return driver.getWindowHandles().size();
     }
 
 }
