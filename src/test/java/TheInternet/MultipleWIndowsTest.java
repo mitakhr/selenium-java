@@ -34,7 +34,5 @@ public class MultipleWIndowsTest {
         Assert.assertEquals(multipleWIndows.getTextNewWindow(), "New Window");
 
         Assert.assertEquals(multipleWIndows.numberOfWindows(2), 2);
-
-
     }
 }
