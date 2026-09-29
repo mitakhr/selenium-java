@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -29,16 +30,28 @@ public class ActionsPage {
         actions.moveToElement(target)
                 .perform();
     }
-    public boolean isProfileCaptionDisplayed(int index){
+    private WebElement displayProfile(int index){
         List<WebElement> figures = driver.findElements(By.className("figure")); // get 1 container
         WebElement target = figures.get(index); // get by index
         WebElement caption = target.findElement(By.cssSelector(".figcaption h5")); //scoped search : cari di specific container tadi
-        return caption.isDisplayed();
+        return caption;
+    }
+    public boolean isProfileCaptionDisplayed(int index){
+        return displayProfile(index).isDisplayed();
     }
     public String getProfileName(int index){
-        List<WebElement> figures = driver.findElements(By.className("figure"));
-        WebElement target = figures.get(index);
-        WebElement caption = target.findElement(By.cssSelector(".figcaption h5"));
-        return caption.getText();
+        return displayProfile(index).getText();
     }
+    public void clickProfileLink(int index){
+        List<WebElement> figures = driver.findElements(By.className("figure")); // get 1 container
+        WebElement target = figures.get(index); // get by index
+        WebElement link = target.findElement(By.cssSelector(".figcaption a")); //scoped search : cari di specific container tadi
+        wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+
+    }
+    public String getProfilePageContent(){
+        String text = driver.findElement(By.tagName("h1")).getText();
+        return text;
+    }
+
 }

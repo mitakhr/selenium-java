@@ -25,10 +25,18 @@ public class ActionsTest {
         driver.quit();
     }
     @Test
-    public void linkShouldAppearWhenHover() {
+    public void profileCaptionShouldAppearWhenHover() {
         Assert.assertFalse(actionsPage.isProfileCaptionDisplayed(1));
         actionsPage.hoverProfile(1);
-        actionsPage.isProfileCaptionDisplayed(1);
+        Assert.assertTrue(actionsPage.isProfileCaptionDisplayed(1));
         Assert.assertEquals(actionsPage.getProfileName(1), "name: user2");
+    }
+    @Test
+    public void clickProfileLinkFromHover(){
+        actionsPage.hoverProfile(1);
+        actionsPage.clickProfileLink(1);
+        String url = driver.getCurrentUrl();
+        Assert.assertEquals(url, "https://the-internet.herokuapp.com/users/2");
+        Assert.assertEquals(actionsPage.getProfilePageContent(), "Not Found");
     }
 }
