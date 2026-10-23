@@ -4,19 +4,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
 
-public class ActionsPage {
+public class ActionsPageHover {
     WebDriver driver;
     WebDriverWait wait;
     Actions actions;
 
-    public ActionsPage(WebDriver driver) {
+    public ActionsPageHover(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         this.actions = new Actions(driver);
@@ -47,11 +46,12 @@ public class ActionsPage {
         WebElement target = figures.get(index); // get by index
         WebElement link = target.findElement(By.cssSelector(".figcaption a")); //scoped search : cari di specific container tadi
         wait.until(ExpectedConditions.elementToBeClickable(link)).click();
-
     }
     public String getProfilePageContent(){
         String text = driver.findElement(By.tagName("h1")).getText();
         return text;
     }
+
+
 
 }
